@@ -1,71 +1,67 @@
-CREATE DATABASE zoo_db;
+-- 1.CASE & AS.
+SELECT 
+    emp_name,
+    email,
+    CASE
+        WHEN gender = 1 THEN 'Nam'
+        ELSE 'Nu'
+    END AS gender_name
+FROM Employee;
 
-USE zoo_db;
+--2.Hàm hệ thống.
+SELECT
+    UPPER(emp_name) AS employee_name,
+    YEAR(CURDATE()) - YEAR(birth_date) AS age
+FROM Employee;
 
-CREATE TABLE animals (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) UNIQUE NOT NULL,
-    animal_type VARCHAR(255) NOT NULL,
-    age SMALLINT NOT NULL
+--3.INNER JOIN.
+SELECT
+    Employee.emp_name,
+    Employee.salary,
+    Department.dept_name
+FROM Employee
+INNER JOIN Department
+ON Employee.dept_id = Department.dept_id;
+
+--4.ORDER BY & LIMIT.
+SELECT *
+FROM Employee
+ORDER BY salary DESC
+LIMIT 2;
+
+--5.GROUP BY & HAVING.
+SELECT
+    dept_id,
+    COUNT(*) AS total_employee
+FROM Employee
+GROUP BY dept_id
+HAVING COUNT(*) >= 2;
+
+--6.Scalar Subquery.
+SELECT *
+FROM Employee
+WHERE salary >
+(
+    SELECT AVG(salary)
+    FROM Employee
 );
 
-INSERT INTO animals (name, animal_type, age) VALUES
-('Buddy', 'Dog', 3),
-('Milo', 'Cat', 2),
-('Charlie', 'Dog', 5),
-('Max', 'Dog', 4),
-('Luna', 'Cat', 1),
-('Bella', 'Dog', 6),
-('Lucy', 'Cat', 3),
-('Daisy', 'Rabbit', 2),
-('Rocky', 'Dog', 7),
-('Coco', 'Parrot', 4),
-('Oscar', 'Cat', 5),
-('Ruby', 'Dog', 2),
-('Simba', 'Lion', 8),
-('Nala', 'Lion', 7),
-('Jack', 'Monkey', 6),
-('Lily', 'Dog', 3),
-('Toby', 'Dog', 9),
-('Molly', 'Cat', 4),
-('Leo', 'Tiger', 6),
-('Zoe', 'Dog', 2),
-('Chloe', 'Cat', 3),
-('Buster', 'Dog', 5),
-('Pepper', 'Cat', 2),
-('Shadow', 'Dog', 8),
-('Ginger', 'Cat', 1),
-('Sam', 'Horse', 10),
-('Ellie', 'Elephant', 15),
-('George', 'Giraffe', 12),
-('Hazel', 'Rabbit', 3),
-('Oliver', 'Cat', 4);
+--7.IN Operator Subquery.
+SELECT *
+FROM Employee
+WHERE emp_id IN
+(
+    SELECT emp_id
+    FROM Project
+);
 
--- SELECT dưới 10 tuổi
-SELECT * FROM animals WHERE age < 10;
-
--- SELECT trong khoảng từ 3 - 10 tuổi
-SELECT * FROM animals WHERE age BETWEEN 3 AND 10;
-
-SELECT * FROM animals WHERE age >= 3 AND age <= 10;
-
--- SELECT các loài động vật là chó, mèo, hổ
-SELECT * FROM animals WHERE animal_type IN ('DOG', 'cat', 'tiger');
-
-SELECT * FROM animals 
-WHERE animal_type = 'DOG' 
-OR animal_type = 'cat' 
-OR animal_type = 'TIGER';
-
--- SELECT động vật bắt đầu bằng M
-SELECT * FROM animals WHERE name LIKE '%M%';
-
--- SELECT động vật có tuổi bắt đầu là 1
-SELECT * FROM animals WHERE age NOT LIKE '%1%';
-
--- SELECT động vật là chó và sắp xếp tăng dần theo tuổi
-SELECT * FROM animals WHERE animal_type = 'Dog' ORDER BY age ASC;
-
--- SELECT động vật lớn hơn 3 tuổi, sắp xếp tên theo bảng chữ cái, 
--- nếu trùng tên thì sắp xếp theo tuổi tăng dần
+--8.Correlated Subquery.
+SELECT *
+FROM Employee e1
+WHERE salary =
+(
+    SELECT MAX(salary)
+    FROM Employee e2
+    WHERE e1.dept_id = e2.dept_id
+);
 
