@@ -1,4 +1,4 @@
-CREATE TABLE Department (
+CREATE TABLE Department_New (
     dept_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     dept_name VARCHAR(100) NOT NULL,
     location VARCHAR(100) 
@@ -22,7 +22,7 @@ CREATE TABLE Project (
     project_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     project_name VARCHAR(150) NOT NULL, 
     emp_id INT,
-    start_date DATE DEFAULT CURRENT_DATE,
+    start_date DATE DEFAULT (CURRENT_DATE),
     end_date DATE,
     
     FOREIGN KEY (emp_id)
